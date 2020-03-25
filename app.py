@@ -61,7 +61,7 @@ def sms_reply():
 	if(msg!=None):
 		if(('corona' in msg.lower().split())and(('stats' in msg.lower().split())or ('statistics' in msg.lower().split()) or ('news' in msg.lower().split()) or ('updates' in msg.lower().split()) or ('update' in msg.lower().split()) or ('statistic' in msg.lower().split()) or ('stat' in msg.lower().split()))):
 			msg_body = show_all()
-			first_part_body = msg_body[0][:len(msg_body[0]) // 2 + 12]
+			first_part_body = msg_body[0][:len(msg_body[0]) // 2 + 14]
 			second_part_body = msg_body[0][len(msg_body[0]) // 2 + 12:]
 			third_part_body = msg_body[1]
 			if('world' in msg.lower().split()):
@@ -255,13 +255,13 @@ def show_all():
 	return ([main_data1,main_data2])
 
 def createMessage(msg_body):
-	pnlist=['+919635270177']
+	pnlist=['+919635270177','+917908483889','+919679995500','+918436858480','+917001291866','+919732248317','+918609016486','+918579926004']
 	account_sid = 'AC40f1ae77f284fb9522f629b5454cb991'
-	auth_token = '821f85fa4663010609446699f9707c22'
+	auth_token = 'a6aa50dc31dc4e954c5dd2c9ef7f8ff9'
 	client = Client(account_sid, auth_token)
 	for x in pnlist:
 		message = client.messages.create(from_='whatsapp:+14155238886',body=msg_body,to='whatsapp:'+x)
-	print(message.sid)
+	#print(message.sid)
 '''
 print(show_world_data())
 print(show_ind_data())
@@ -271,4 +271,4 @@ print(show_ind_data())
 #print(show_all())
 
 if __name__ == "__main__":
-	app.run(debug=True)
+	app.run()
