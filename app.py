@@ -69,7 +69,7 @@ def sms_reply():
 			else:
 				reply=third_part_body
 		elif('schedule' in msg.lower().split() and 'all' in msg.lower().split()):
-			requests.get("http://127.0.0.1:5000/jobs")
+			requests.get("http://tomatotalk.herokuapp.com/jobs")
 			reply="Alarms & Wishes are all set."
 		else:
 			reply=bot.get_response(msg)
