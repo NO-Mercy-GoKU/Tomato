@@ -96,7 +96,7 @@ def sms_reply():
 			}
 			joke_response = requests.request("GET", url, headers=headers, params=querystring)
 			print(joke_response.text)
-			joke_response_json=json.loads(joke_response)
+			joke_response_json=json.loads(joke_response.text)
 			if(joke_response_json.get('joke')==None):
 				reply=joke_response_json.get('setup')+"\n"+joke_response_json.get('delivery')
 			else:
