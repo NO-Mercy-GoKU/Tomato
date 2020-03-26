@@ -86,6 +86,20 @@ def sms_reply():
 				reply=first_part_body
 			else:
 				reply=third_part_body
+		elif('joke' in msg.lower().split() or 'jokes' in msg.lower().split()):
+			url = "https://jokeapi.p.rapidapi.com/category/Any"
+			querystring = {"format": "json"}
+			headers = {
+				'x-rapidapi-host': "jokeapi.p.rapidapi.com",
+				'x-rapidapi-key': "e31b809e20mshf1eb77a4f8b2f7fp1aa244jsnf67574dab9be"
+			}
+			joke_response = requests.request("GET", url, headers=headers, params=querystring)
+			print(joke_response.text)
+			joke_response_json=json.loads(joke_response)
+			if(joke_response_json.get('joke')==None):
+				reply=joke_response_json.get('setup')+"\n"+joke_response_json.get('delivery')
+			else:
+				reply=joke_response_json.get('joke')
 		elif('schedule' in msg.lower().split() and 'all' in msg.lower().split()):
 			requests.get("http://tomatotalk.herokuapp.com/jobs")
 			reply="Alarms & Wishes are all set."
