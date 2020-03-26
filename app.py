@@ -79,8 +79,8 @@ def sms_reply():
 	if(msg!=None):
 		if(('corona' in msg.lower().split())and(('stats' in msg.lower().split())or ('statistics' in msg.lower().split()) or ('news' in msg.lower().split()) or ('updates' in msg.lower().split()) or ('update' in msg.lower().split()) or ('statistic' in msg.lower().split()) or ('stat' in msg.lower().split()))):
 			msg_body = show_all()
-			first_part_body = msg_body[0][:len(msg_body[0]) // 2 + 14]
-			second_part_body = msg_body[0][len(msg_body[0]) // 2 + 12:]
+			first_part_body = msg_body[0][:1600]
+			second_part_body = msg_body[0][1600:]
 			third_part_body = msg_body[1]
 			if('world' in msg.lower().split()):
 				reply=first_part_body
