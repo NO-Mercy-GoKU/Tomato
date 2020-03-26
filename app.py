@@ -3,6 +3,9 @@ Created on Tue Mar 24 21:44:39 2020
 
 @author: MahaKAAL
 """
+
+
+
 import requests
 from time import sleep
 from bs4 import BeautifulSoup
@@ -14,7 +17,11 @@ from twilio.twiml.messaging_response import MessagingResponse
 from twilio.rest import Client
 import datetime
 from concurrent.futures import ThreadPoolExecutor
-executor = ThreadPoolExecutor(2)
+import pytz
+
+
+
+executor = ThreadPoolExecutor(3)
 executed=False
 wished=False
 bot = ChatBot(
@@ -49,10 +56,19 @@ bot = ChatBot(
 			"import_path": "chatterbot.logic.MathematicalEvaluation",
 		}
 	],)
+
+
+
+
 app = Flask(__name__)
+
+
 @app.route("/")
 def hello():
 	return "<Head>Hello folks! This is a new api of chatbot, Tomato. Just request a post method at /sms and get your reply.</Head>"
+
+
+
 @app.route("/sms", methods=['POST'])
 def sms_reply():
 	msg = request.form.get('Body')
@@ -78,74 +94,78 @@ def sms_reply():
 	resp.message(str(reply))
 	return str(resp)
 
+
 @app.route('/jobs')
 def run_jobs():
     executor.submit(alarms)
-    executor.submit(wishes)
+    executor.submit(wishesGm)
+    executor.submit(wishesGn)
     return 'Alarms are launched in background!'
 
-def wishes():
+
+def wishesGm():
+	global gm
 	print("Wishes are scheduled")
-	if(True):
-		dt=datetime.datetime
-		if(dt.now().hour>6 and dt.now().hour<=22):
-			wish='Good Night'
-			sleeping_time=(22-dt.now().hour)*3600+(59-dt.now().minute)*60+(59-dt.now().second)
-			print(sleeping_time)
-			if(sleeping_time<0):
-				wishes()
-			sleep(sleeping_time)
-			createMessage(wish)
+	if(gm==False):
+		gm=True
+		tz = pytz.timezone('Asia/Kolkata')
+		dt = datetime.datetime
+		your_now = dt.now(tz)
+		wish='Good Morning'
+		if(your_now.hour>6 or (your_now.hour==6 and your_now.minute>30)):
+			sleeping_time=(29-your_now.hour)*3600+(89-your_now.minute)*60+(59-your_now.second)
 		else:
-			wish = 'Good Morning'
-			sleeping_time=(5-dt.now().hour)*3600+(59-dt.now().minute)*60+(59-dt.now().second)
-			print(sleeping_time)
-			if (sleeping_time < 0):
-				wishes()
-			sleep(sleeping_time)
-			createMessage(wish)
-
+			sleeping_time = (6 - your_now.hour) * 3600 + (29 - your_now.minute) * 60 + (59 - your_now.second)
+		print('gm '+str(sleeping_time))
+		sleep(sleeping_time)
+		createMessage(wish)
 		print("Already done Wishing.")
-		wishes()
-'''
-if(dt.now().hour>6):
-			wish='Good Night'
-			sleeping_time=(29-dt.now().hour)*3600+(59-dt.now().minute)*60+(59-dt.now().second)
-		else:
-			sleeping_time=(22-dt.now().hour)*3600+(59-dt.now().minute)*60+(59-dt.now().second)
-			wish='Good Morning'
+		gm=False
 
-'''
+
+def wishesGn():
+	global gn
+	print("Wishes are scheduled")
+	if(gn==False):
+		gn=True
+		tz = pytz.timezone('Asia/Kolkata')
+		dt = datetime.datetime
+		your_now = dt.now(tz)
+		wish='Good Night'
+		if(your_now.hour>22 or (your_now.hour==22 and your_now.minute>=30)):
+			sleeping_time=(45-your_now.hour)*3600+(89-your_now.minute)*60+(59-your_now.second)
+		else:
+			sleeping_time = (22 - your_now.hour) * 3600 + (29 - your_now.minute) * 60 + (59 - your_now.second)
+		print('gn ' + str(sleeping_time))
+		sleep(sleeping_time)
+		createMessage(wish)
+		print("Already done Wishing.")
+		gn=False
 
 def alarms():
 	global executed
 	print("Corona Alarms are scheduled!")
-	print(executed)
 	if(executed==False):
 		executed = True
 		dt=datetime.datetime
-		if(dt.now().hour>=6):
-			sleeping_time=(29-dt.now().hour)*3600+(59-dt.now().minute)*60+(59-dt.now().second)
+		tz = pytz.timezone('Asia/Kolkata')
+		your_now = dt.now(tz)
+		if(your_now.hour>6 or (your_now.hour==6 and your_now.minute>30)):
+			sleeping_time=(29-your_now.hour)*3600+(89-your_now.minute)*60+(59-your_now.second)
 		else:
-			sleeping_time=(5-dt.now().hour)*3600+(59-dt.now().minute)*60+(59-dt.now().second)
-		print(sleeping_time)
-		if(sleeping_time<0):
-			executed=False
-			alarms()
+			sleeping_time=(6-your_now.hour)*3600+(29-your_now.minute)*60+(59-your_now.second)
+		print('alarms ', str(sleeping_time))
 		sleep(sleeping_time)
 		msg_body = show_all()
-		first_part_body=msg_body[0][:len(msg_body[0]) // 2 + 12]
+		first_part_body=msg_body[0][:len(msg_body[0]) // 2]
 		createMessage(first_part_body)
-		second_part_body=msg_body[0][len(msg_body[0]) // 2 + 12:]
+		second_part_body=msg_body[0][len(msg_body[0]) // 2:]
 		createMessage(second_part_body)
 		third_part_body=msg_body[1]
 		createMessage(third_part_body)
 		print("Updates Posted")
 		executed=False
-		alarms()
 
-
-# World Data finding
 def download_world_data():
 	a = requests.get("https://www.worldometers.info/coronavirus/")
 	got_data = a.text
@@ -160,13 +180,7 @@ def download_world_data():
 			world_data.append(b.text.strip().split('\n'))
 	return world_data
 
-
-# pd_data_world=pd.DataFrame(world_data[1:-1],columns=world_data[0])
-# pd_data_world.to_csv('corona_stats_world.csv')
-
-
 def download_ind_data():
-	# India Data Finding
 	a1 = requests.get("https://www.mohfw.gov.in/")
 	got_data2 = a1.text
 	soup2 = BeautifulSoup(got_data2, 'html.parser')
@@ -179,12 +193,6 @@ def download_ind_data():
 			for z in (y.find_all('tr')):
 				download_data.append(z.text.strip().split('\n'))
 	return download_data
-
-
-# Visualising the data in CSV format
-# pd_data=pd.DataFrame(download_data[1:-1],columns=download_data[0])
-# pd_data.to_csv('corona_stats_india.csv')
-
 
 def format_world_data():
 	world_data = download_world_data()
@@ -202,7 +210,6 @@ def format_world_data():
 		if (mydict['Country,Other'] == "India"):
 			break
 		mydict = {}
-	# print(objects)
 	return objects
 
 
@@ -220,7 +227,6 @@ def format_ind_data():
 
 		objects.append(mydict)
 		mydict = {}
-	# print(objects)
 	return objects
 
 
@@ -261,14 +267,6 @@ def createMessage(msg_body):
 	client = Client(account_sid, auth_token)
 	for x in pnlist:
 		message = client.messages.create(from_='whatsapp:+14155238886',body=msg_body,to='whatsapp:'+x)
-	#print(message.sid)
-'''
-print(show_world_data())
-print(show_ind_data())
-
-#Just By running show_world_data and show_ind_data function we can get the output
-'''
-#print(show_all())
 
 if __name__ == "__main__":
 	app.run()
