@@ -25,7 +25,7 @@ executor = ThreadPoolExecutor(3)
 executed=False
 wished=False
 gn=False
-gn=False
+gm=False
 bot = ChatBot(
 	'Tomato',
 	storage_adapter='chatterbot.storage.SQLStorageAdapter',
