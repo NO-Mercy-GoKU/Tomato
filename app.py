@@ -24,6 +24,8 @@ import pytz
 executor = ThreadPoolExecutor(3)
 executed=False
 wished=False
+gn=False
+gn=False
 bot = ChatBot(
 	'Tomato',
 	storage_adapter='chatterbot.storage.SQLStorageAdapter',
@@ -105,7 +107,6 @@ def run_jobs():
 
 def wishesGm():
 	global gm
-	print("Wishes are scheduled")
 	if(gm==False):
 		gm=True
 		tz = pytz.timezone('Asia/Kolkata')
@@ -116,6 +117,7 @@ def wishesGm():
 			sleeping_time=(29-your_now.hour)*3600+(89-your_now.minute)*60+(59-your_now.second)
 		else:
 			sleeping_time = (6 - your_now.hour) * 3600 + (29 - your_now.minute) * 60 + (59 - your_now.second)
+		print("Wishes are scheduled")
 		print('gm '+str(sleeping_time))
 		sleep(sleeping_time)
 		createMessage(wish)
@@ -125,7 +127,6 @@ def wishesGm():
 
 def wishesGn():
 	global gn
-	print("Wishes are scheduled")
 	if(gn==False):
 		gn=True
 		tz = pytz.timezone('Asia/Kolkata')
@@ -136,6 +137,7 @@ def wishesGn():
 			sleeping_time=(45-your_now.hour)*3600+(89-your_now.minute)*60+(59-your_now.second)
 		else:
 			sleeping_time = (22 - your_now.hour) * 3600 + (29 - your_now.minute) * 60 + (59 - your_now.second)
+		print("Wishes are scheduled")
 		print('gn ' + str(sleeping_time))
 		sleep(sleeping_time)
 		createMessage(wish)
@@ -144,7 +146,6 @@ def wishesGn():
 
 def alarms():
 	global executed
-	print("Corona Alarms are scheduled!")
 	if(executed==False):
 		executed = True
 		dt=datetime.datetime
@@ -154,6 +155,7 @@ def alarms():
 			sleeping_time=(29-your_now.hour)*3600+(89-your_now.minute)*60+(59-your_now.second)
 		else:
 			sleeping_time=(6-your_now.hour)*3600+(29-your_now.minute)*60+(59-your_now.second)
+		print("Corona Alarms are scheduled!")
 		print('alarms ', str(sleeping_time))
 		sleep(sleeping_time)
 		msg_body = show_all()
