@@ -114,7 +114,7 @@ def wishesGm():
 		your_now = dt.now(tz)
 		wish='Good Morning'
 		if(your_now.hour>6 or (your_now.hour==6 and your_now.minute>30)):
-			sleeping_time=(29-your_now.hour)*3600+(89-your_now.minute)*60+(59-your_now.second)
+			sleeping_time=(29-your_now.hour)*3600+(29-your_now.minute)*60+(59-your_now.second)
 		else:
 			sleeping_time = (6 - your_now.hour) * 3600 + (29 - your_now.minute) * 60 + (59 - your_now.second)
 		print("Wishes are scheduled")
@@ -134,7 +134,7 @@ def wishesGn():
 		your_now = dt.now(tz)
 		wish='Good Night'
 		if(your_now.hour>22 or (your_now.hour==22 and your_now.minute>=30)):
-			sleeping_time=(45-your_now.hour)*3600+(89-your_now.minute)*60+(59-your_now.second)
+			sleeping_time=(45-your_now.hour)*3600+(29-your_now.minute)*60+(59-your_now.second)
 		else:
 			sleeping_time = (22 - your_now.hour) * 3600 + (29 - your_now.minute) * 60 + (59 - your_now.second)
 		print("Wishes are scheduled")
@@ -152,7 +152,7 @@ def alarms():
 		tz = pytz.timezone('Asia/Kolkata')
 		your_now = dt.now(tz)
 		if(your_now.hour>6 or (your_now.hour==6 and your_now.minute>30)):
-			sleeping_time=(29-your_now.hour)*3600+(89-your_now.minute)*60+(59-your_now.second)
+			sleeping_time=(29-your_now.hour)*3600+(29-your_now.minute)*60+(59-your_now.second)
 		else:
 			sleeping_time=(6-your_now.hour)*3600+(29-your_now.minute)*60+(59-your_now.second)
 		print("Corona Alarms are scheduled!")
