@@ -261,7 +261,7 @@ def show_ind_data():
 	returning = ""
 	for x in values_got2:
 		returning += (x.get('Name of State / UT') + "\n" + "Total Cases: " + x.get(
-			'Total Confirmed cases (Indian National)') + "\n" + 'Total Deaths: ' + x.get('Death') + "\n\n")
+			'Total Confirmed cases *') + "\n" + 'Total Deaths: ' + x.get('Death') + "\n\n")
 	return returning
 
 
